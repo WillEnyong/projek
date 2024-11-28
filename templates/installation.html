@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Node Tools</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --code-bg: #1a1a1a;
+            --card-bg: #ffffff;
+        }
+        
+        body { 
+            font-family: monospace; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5;
+        }
+        
+        .nav-menu {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .menu-item {
+            display: inline-block;
+            padding: 8px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .menu-item:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .menu-item.active {
+            background-color: #333;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .command-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .command-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-block:hover::before {
+            opacity: 1;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 5px solid #ffeeba;
+        }
+
+        .warning code {
+            background: #fff5d8;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .warning a {
+            color: #856404;
+            text-decoration: underline;
+        }
+
+        .warning a:hover {
+            color: #533f03;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .specs-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .specs-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .command-block code {
+            white-space: pre;
+            display: block;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        h3 {
+            color: #444;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .warning pre {
+            background: #fff5d8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .warning a {
+            color: #856404;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+
+        .warning ul {
+            margin: 10px 0;
+        }
+
+        .warning li {
+            margin: 5px 0;
+        }
+
+        h3 {
+            margin-top: 25px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-menu">
+        <a href="/" class="menu-item">Story</a>
+        <a href="/monitoring" class="menu-item">Monitoring</a>
+        <a href="/installation" class="menu-item active">Installation</a>
+        <a href="/about" class="menu-item">About Me</a>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>System Requirements</h2>
+            <table class="specs-table">
+                <tr>
+                    <th>Hardware</th>
+                    <th>Requirement</th>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>6 Cores</td>
+                </tr>
+                <tr>
+                    <td>RAM</td>
+                    <td>16 GB</td>
+                </tr>
+                <tr>
+                    <td>Storage</td>
+                    <td>400 GB (NVME)</td>
+                </tr>
+                <tr>
+                    <td>Bandwidth</td>
+                    <td>100 Mb/s</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>RPC, API, ENODE, PEERS, SEEDS, GENESIS, ADDRBOOK</h2>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code>
+RPC		= https://rpc-story.winnode.xyz/
+
+API		= https://api-story.winnode.xyz/
+
+REST    = https://api-rest-story.winnode.xyz/
+
+ENCODE		= enode://87ac44267747a12b4357c75f2ac44ca1d88deaf369f73368cb81d97718c81fbdb83ee6dfdaa24e2552b85dbadd4e51273a2ecf1b20deb4bf68c67dedf265b338@enode-story.winnode.xyz:30303
+
+PEER		= 4ddaa54c80fca29bb365d124070af63eddea5f65@peer-story.winnode.xyz:18656
+
+SEEDS		= 434af9dae402ab9f1c8a8fc15eae2d68b5be3387@seeds-story.winnode.xyz:29656
+
+Genesis 	= https://files-story.winnode.xyz/genesis.json
+
+Addrbook 	= https://files-story.winnode.xyz/addrbook.json</code>
+            </div>
+
+            <h2>Auto Installation</h2>
+            <div class="warning">
+                <strong>Quick Install:</strong> This will automatically install and configure your Story node
+            </div>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code>bash <(curl -s https://data.winnode.xyz/file/uploads/auto-story.sh)</code>
+            </div>
+            
+            <img src="{{ url_for('static', filename='images/menu.png') }}" 
+                 alt="Story Node Menu Interface"
+                 style="max-width: 100%; 
+                        margin: 20px 0;
+                        border-radius: 4px;">
+        </div>
+
+        <div class="section">
+            <h2>Cheat Sheet</h2>
+            
+            <h3>Key Management</h3>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code># Export validator EVM key
+story validator export --export-evm-key
+
+# Display private key content
+cat /root/.story/story/config/private_key.txt
+
+# Display validator key content
+cat /root/.story/story/config/priv_validator_key.json</code>
+            </div>
+
+            <h3>Story-Geth Service Management</h3>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code># Reload systemd daemon
+sudo systemctl daemon-reload
+
+# Start story-geth service
+sudo systemctl start story-geth
+
+# Enable story-geth service on boot
+sudo systemctl enable story-geth
+
+# Check story-geth service status
+sudo systemctl status story-geth</code>
+            </div>
+
+            <h3>Story Service Management</h3>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code># Reload systemd daemon
+sudo systemctl daemon-reload
+
+# Start story service
+sudo systemctl start story
+
+# Enable story service on boot
+sudo systemctl enable story
+
+# Check story service status
+sudo systemctl status story</code>
+            </div>
+            <h3>Snapshot</h3>
+            <div class="command-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                <code>
+sudo apt install curl tmux jq lz4 unzip -y
+sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\\1false|" $HOME/.story/story/config/config.toml
+
+# Stop services and backup validator state
+sudo systemctl stop story story-geth
+cp $HOME/.story/story/data/priv_validator_state.json $HOME/.story/story/priv_validator_state.json.backup
+
+# Remove and restore Story data
+rm -rf $HOME/.story/story/data
+curl https://files-story.winnode.xyz/story/story-snapshot.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/story
+
+# Restore validator state
+mv $HOME/.story/story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
+
+# Remove and restore Geth data
+rm -rf $HOME/.story/geth/odyssey/geth/chaindata
+curl https://files-story.winnode.xyz/geth/geth-snapshot.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/odyssey/geth
+
+# restart node and check logs
+sudo systemctl restart story story-geth
+sudo journalctl -u story-geth -u story -f</code>
+            </div>
+        </div>
+            <div class="warning">
+                <strong>Note:</strong>
+                <ul>
+                    <li>Always backup your keys before making any changes</li>
+                    <li>Keep your private keys secure and never share them</li>
+                    <li>Monitor service status regularly to ensure proper operation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const commandBlock = button.parentElement;
+            const code = commandBlock.querySelector('code');
+            
+            navigator.clipboard.writeText(code.textContent).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
